@@ -14,12 +14,12 @@ jobs:
       - name: 检查仓库
         uses: actions/checkout@v2
 
-      - name: 安装 sshpass
-        run: sudo apt-get install -y sshpass
+      #- name: 安装 sshpass
+        #run: sudo apt-get install -y sshpass
 
       - name: 连接SSH并执行命令
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        #env:
+          #SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           vnt="pgrep -x 'vnts' > /dev/null || /home/xf110/tool/vnts -p 6911 -g 192.168.26.222 -m 255.255.255.0"
           vpn="pgrep -x 'web' > /dev/null || bash /home/xf110/tool/sb_serv00.sh 6907 6908 6909"
