@@ -1,0 +1,71 @@
+name: Daily SSH Command
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */4 * * *'  # 每4小时执行一次，UTC 时间
+env:
+  TZ: Asia/Shanghai
+jobs:
+  run-ssh-command:
+    runs-on: ubuntu-latest
+   
+    steps:
+      - name: 检查仓库
+        uses: actions/checkout@v2
+
+      #- name: 安装 sshpass
+        #run: sudo apt-get install -y sshpass
+
+      - name: 连接SSH并执行命令
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          vnt="pgrep -x 'vnts' > /dev/null || /home/xf110/tool/vnts -p 6911 -g 192.168.26.222 -m 255.255.255.0"
+          vpn="pgrep -x 'web' > /dev/null || bash /home/xf110/tool/sb_serv00.sh 6907 6908 6909"
+          vpn1="pgrep -x 'web' > /dev/null || bash /home/szbw/tool/sb_serv00.sh 6907 6908 6909"
+          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt xf110@s4.serv00.com "$vnt"
+          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt xf119@s4.serv00.com "exit"
+          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt szbw@s8.serv00.com "$vpn1"
+          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt xf110@s1.ct8.pl "$vpn"
+          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt xf119@s1.ct8.pl "exit"
+          
+          # 登录面板
+          mkdir -p /opt/cook
+          cd /opt/cook
+          login_and_check() {
+          local username=$1
+          local panel_url=$2
+ 
+          # 获取 CSRF 认证值和 CSRF token 值
+          csrfmiddlewaretoken=$(curl -L -c token.txt -k -s "$panel_url/login/" | awk -F '"' '/<input type="hidden" name="csrfmiddlewaretoken"/ {print $6}' | head -n 1)
+          echo -e "\033[36;1mcsrfmiddlewaretoken=\033[0m\033[35;1m$csrfmiddlewaretoken \033[0m"
+          csrftoken=$(cat token.txt | grep "csrftoken" | awk '{print $7}')
+          echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
+
+          # 登录账号获取 sessionid 值
+          curl -c sessionid.txt -k -s "$panel_url/login/" -X POST \
+          -H "Referer: $panel_url/login/" \
+          -H "Cookie: csrftoken=$csrftoken" \
+          -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}"
+          sessionid=$(grep "sessionid" sessionid.txt | awk '{print $7}')
+          echo -e "\033[36;1msessionid=\033[0m\033[35;1m$sessionid \033[0m"
+
+          # 登录面板并检查状态
+          status=$(curl -k -s "$panel_url"  \
+          -H 'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0' \
+          -H 'Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2' \
+          -H "Cookie: csrftoken=${csrftoken}; sessionid=$sessionid" | grep -o "Port reservation")
+          if [ ! -z "$status" ]; then
+          echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 签到保活成功！ \033[0m"
+          else
+          echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 失败了请检查！ \033[0m"
+          fi
+          }
+
+          # 循环执行登录
+          login_and_check "xf110" "https://panel.ct8.pl"                                                                                                                   
+          login_and_check "xf119" "https://panel.ct8.pl"                                                                                                                   
+          login_and_check "xf110" "https://panel4.serv00.com"                                                                                                              
+          login_and_check "xf119" "https://panel4.serv00.com"                                                                                                              
+          login_and_check "szbw" "https://panel8.serv00.com"                                                                                                               
