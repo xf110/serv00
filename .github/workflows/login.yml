@@ -1,4 +1,4 @@
-name: Daily SSH Command
+name: Daily Login Serv00 Command
 
 on:
   workflow_dispatch:
