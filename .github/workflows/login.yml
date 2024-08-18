@@ -61,3 +61,11 @@ jobs:
           login_and_check "${{ secrets.USER1 }}" "https://panel4.serv00.com"                                                                                                              
           login_and_check "${{ secrets.USER2 }}" "https://panel4.serv00.com"                                                                                                              
           login_and_check "${{ secrets.USER3 }}" "https://panel8.serv00.com"                                                                                                               
+  keepalive-job:
+    name: Keepalive Workflow
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2
