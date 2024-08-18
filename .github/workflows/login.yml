@@ -50,15 +50,15 @@ jobs:
           echo -e "\033[36;1msessionid=\033[0m\033[35;1m$sessionid \033[0m"
 
           # 登录面板并检查状态
-          #status=$(curl -k -s "$panel_url"  \
-          #-H 'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0' \
-          #-H 'Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2' \
-          #-H "Cookie: csrftoken=${csrftoken}; sessionid=$sessionid" | grep -o "Port reservation")
-          #if [ ! -z "$status" ]; then
-          #echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 签到保活成功！ \033[0m"
-          #else
-          #echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 失败了请检查！ \033[0m"
-          #fi
+          status=$(curl -k -s "$panel_url"  \
+          -H 'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0' \
+          -H 'Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2' \
+          -H "Cookie: csrftoken=${csrftoken}; sessionid=$sessionid" | grep -o "Port reservation")
+          if [ ! -z "$status" ]; then
+          echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 签到保活成功！ \033[0m"
+          else
+          echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 失败了请检查！ \033[0m"
+          fi
           }
 
           # 循环执行登录
