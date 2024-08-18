@@ -27,7 +27,7 @@ jobs:
     - name: Run login script
       env:
         USERNAME: ${{ secrets.USER1 }}  # 使用 GitHub Secrets 存储敏感信息
-        PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
         python -c "
         import requests
