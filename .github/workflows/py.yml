@@ -1,0 +1,42 @@
+name: Auto Login Panel4
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  login-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository content
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # 确保使用正确的 Python 版本
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
+    - name: Run login script
+      env:
+        USERNAME: ${{ secrets.USER1 }}  # 使用 GitHub Secrets 存储敏感信息
+        PASSWORD: ${{ secrets.SSH_PASSWORD }}
+      run: |
+        python -c "
+        import requests
+        session = requests.Session()
+        login_url = 'https://panel4.serv00.com/login'
+        login_data = {'username': '${{ env.USERNAME }}', 'password': '${{ env.PASSWORD }}'}
+        response = session.post(login_url, data=login_data)
+        if 'Home' in response.text:
+        print('登录成功')
+        else:
+        print('登录失败，请检查用户名和密码')
+"
