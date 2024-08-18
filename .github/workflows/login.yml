@@ -32,7 +32,7 @@ jobs:
           local panel_url=$2
  
           # 获取 CSRF 认证值和 CSRF token 值
-          response=$(curl -Lksi "$panel_url")
+          response=$(curl -Lksi "$panel_url/login")
           csrftoken=$(echo "$response" | sed -n 's/.*Set-Cookie: csrftoken=\([^;]*\);.*/\1/p')
           csrfmiddlewaretoken=$(echo "$response" | sed -n 's/.*<input type="hidden" name="csrfmiddlewaretoken" value="\([^"]*\)".*/\1/p' | head -n 1)
           #csrfmiddlewaretoken=$(curl -L -c token.txt -k -s "$panel_url/login/" | awk -F '"' '/<input type="hidden" name="csrfmiddlewaretoken"/ {print $6}' | head -n 1)
