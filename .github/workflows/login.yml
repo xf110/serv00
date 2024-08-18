@@ -39,7 +39,7 @@ jobs:
 
           # 登录账号获取 sessionid 值
           curl -c sessionid.txt -k -s "$panel_url/login/" -X POST \
-          #-H "Referer: $panel_url/login/" \
+          -H "Referer: $panel_url/login/" \
           -H "Cookie: csrftoken=$csrftoken" \
           -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}"
           sessionid=$(grep "sessionid" sessionid.txt | awk '{print $7}')
