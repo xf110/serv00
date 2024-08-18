@@ -41,11 +41,11 @@ jobs:
           echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
 
           # 登录账号获取 sessionid 值
-          curl -c sessionid.txt -k -s "$panel_url/login/" -X POST \
+          sessionid=$(curl -kis "$panel_url/login/" -X POST \
           -H "Referer: $panel_url/login/" \
           -H "Cookie: csrftoken=$csrftoken" \
-          -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}"
-          sessionid=$(grep "sessionid" sessionid.txt | awk '{print $7}')
+          -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}" \
+          |  sed -n 's/.*csrftoken=\([^;]*\);.*/\1/p')
           echo -e "\033[36;1msessionid=\033[0m\033[35;1m$sessionid \033[0m"
 
           # 登录面板并检查状态
