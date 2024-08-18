@@ -25,22 +25,17 @@ jobs:
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER2 }}@s1.ct8.pl "exit"
       - name: 登录面板
         run: |  
-          
-          mkdir -p /opt/cook
-          cd /opt/cook
           login_and_check() {
           local username=$1
           local panel_url=$2
- 
           # 获取 CSRF 认证值和 CSRF token 值
           response=$(curl -Lksi "$panel_url/login")
-          
           csrftoken=$(echo "$response" | sed -n 's/.*csrftoken=\([^;]*\);.*/\1/p')
           csrfmiddlewaretoken=$(echo "$response" | sed -n 's/.*<input type="hidden" name="csrfmiddlewaretoken" value="\([^"]*\)".*/\1/p' | head -n 1)
-          echo -e "\033[36;1mcsrfmiddlewaretoken=\033[0m\033[35;1m$csrfmiddlewaretoken \033[0m"
-          echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
+          #echo -e "\033[36;1mcsrfmiddlewaretoken=\033[0m\033[35;1m$csrfmiddlewaretoken \033[0m"
+          #echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
 
-          # 登录账号获取 sessionid 值
+          # 获取 sessionid 值
           sessionid=$(curl -kis "$panel_url/login/" -X POST \
           -H "Referer: $panel_url/login/" \
           -H "Cookie: csrftoken=$csrftoken" \
