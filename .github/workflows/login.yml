@@ -12,7 +12,7 @@ jobs:
    
     steps:
       - name: 检查仓库
-        uses: actions/checkout@V2
+        uses: actions/checkout@v2
       - name: ssh登录
         run: |
           vnt="pgrep -x 'vnts' > /dev/null || /home/${{ secrets.USER1 }}/tool/vnts -p 6911 -g 192.168.26.222 -m 255.255.255.0"
