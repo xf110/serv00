@@ -62,7 +62,7 @@ jobs:
           login_and_check "${{ secrets.USER2 }}" "https://panel4.serv00.com"                                                                                                              
           login_and_check "${{ secrets.USER3 }}" "https://panel8.serv00.com"                                                                                                               
   keepalive-job:
-    name: Keepalive Workflow
+    name: 保活工作流，防止github60天自动过期
     runs-on: ubuntu-latest
     permissions:
       actions: write
