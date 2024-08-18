@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: 检查仓库
         uses: actions/checkout@v2
-      - name: ssh登录
+      - name: 登录ssh
         run: |
           vnt="pgrep -x 'vnts' > /dev/null || /home/${{ secrets.USER1 }}/tool/vnts -p 6911 -g 192.168.26.222 -m 255.255.255.0"
           vpn="pgrep -x 'web' > /dev/null || bash /home/${{ secrets.USER1 }}/tool/sb_serv00.sh 6907 6908 6909"
@@ -23,8 +23,9 @@ jobs:
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER3 }}@s8.serv00.com "$vpn1"
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER1 }}@s1.ct8.pl "$vpn"
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER2 }}@s1.ct8.pl "exit"
+      - name: 登录面板
+        run: |  
           
-          # 登录面板
           mkdir -p /opt/cook
           cd /opt/cook
           login_and_check() {
@@ -33,12 +34,10 @@ jobs:
  
           # 获取 CSRF 认证值和 CSRF token 值
           response=$(curl -Lksi "$panel_url/login")
-          #echo "$response"
+          
           csrftoken=$(echo "$response" | sed -n 's/.*csrftoken=\([^;]*\);.*/\1/p')
           csrfmiddlewaretoken=$(echo "$response" | sed -n 's/.*<input type="hidden" name="csrfmiddlewaretoken" value="\([^"]*\)".*/\1/p' | head -n 1)
-          #csrfmiddlewaretoken=$(curl -L -c token.txt -k -s "$panel_url/login/" | awk -F '"' '/<input type="hidden" name="csrfmiddlewaretoken"/ {print $6}' | head -n 1)
           echo -e "\033[36;1mcsrfmiddlewaretoken=\033[0m\033[35;1m$csrfmiddlewaretoken \033[0m"
-          #csrftoken=$(cat token.txt | grep "csrftoken" | awk '{print $7}')
           echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
 
           # 登录账号获取 sessionid 值
