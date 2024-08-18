@@ -55,7 +55,7 @@ jobs:
           fi
           }
 
-          # 循环执行登录
+          # 依次执行登录
           login_and_check "${{ secrets.USER1 }}" "https://panel.ct8.pl"                                                                                                                   
           login_and_check "${{ secrets.USER2 }}" "https://panel.ct8.pl"                                                                                                                   
           login_and_check "${{ secrets.USER1 }}" "https://panel4.serv00.com"                                                                                                              
