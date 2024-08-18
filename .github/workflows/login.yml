@@ -59,7 +59,7 @@ jobs:
           #else
           #echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 失败了请检查！ \033[0m"
           #fi
-          #}
+          }
 
           # 循环执行登录
           login_and_check "${{ secrets.USER1 }}" "https://panel.ct8.pl"                                                                                                                   
