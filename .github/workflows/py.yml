@@ -36,7 +36,7 @@ jobs:
         login_data = {'username': '${{ env.USERNAME }}', 'password': '${{ env.PASSWORD }}'}
         response = session.post(login_url, data=login_data)
         if 'Home' in response.text:
-        print('登录成功')
+            print('登录成功')
         else:
-        print('登录失败，请检查用户名和密码')
+            print('登录失败，请检查用户名和密码')
         "
