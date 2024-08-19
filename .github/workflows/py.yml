@@ -68,7 +68,7 @@ jobs:
         login_response = session.post(login_url, data=payload)
 
         # 检查是否登录成功
-        if 'Dashboard' in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
+        if 'Home' in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
             print('Login successful!')
         else:
             print('Login failed.')
