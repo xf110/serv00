@@ -37,7 +37,7 @@ jobs:
         from bs4 import BeautifulSoup
 
         # 目标 URL
-        login_url = 'https://panel4.serv00.com/login'
+        login_url = 'https://panel4.serv00.com/'
 
         # 登录信息（从环境变量中获取）
         username = os.getenv('PANEL_USERNAME')
