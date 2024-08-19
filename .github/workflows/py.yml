@@ -53,6 +53,7 @@ jobs:
         # 尝试从HTML表单中获取csrfmiddlewaretoken或csrftoken
         csrfmiddlewaretoken = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
         csrftoken = session.cookies.get('csrftoken')
+        sessionid = session.cookies.get('sessionid')
         # 准备表单数据
         payload = {
         'username': username,
@@ -70,7 +71,7 @@ jobs:
         print(login_response.text)
         print(csrfmiddlewaretoken)
         print(csrftoken)
-        print(session)
+        print(sessionid)
         # 检查是否登录成功
         if 'Zaloguj się' not in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
             print('Login successful!')
