@@ -51,30 +51,22 @@ jobs:
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # 尝试从HTML表单中获取csrfmiddlewaretoken或csrftoken
-        csrfmiddlewaretoken_input = soup.find('input', {'name': 'csrfmiddlewaretoken'})
-        csrf_token_input = soup.find('input', {'name': 'csrf_token'})
-        csrfmiddlewaretoken = csrfmiddlewaretoken_input['value'] if csrfmiddlewaretoken_input else None
-        csrftoken = csrf_token_input['value'] if csrf_token_input else None
-        if 'csrftoken' in session.cookies:
-            csrftoken = session.cookies['csrftoken']
+        csrfmiddlewaretoken = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
         # 准备表单数据
         payload = {
         'username': username,
         'password': password,
+        'csrfmiddlewaretoken': csrfmiddlewaretoken,
         }
         
        
-        # 添加csrfmiddlewaretoken或csrftoken到表单数据中
-        if csrfmiddlewaretoken:
-            payload['csrfmiddlewaretoken'] = csrfmiddlewaretoken
-        if csrftoken:
-            payload['csrf_token'] = csrftoken
+       
 
         # 发送 POST 请求以登录
         login_response = session.post(login_url, data=payload, headers={'Referer': login_url})
         print(login_response.text)
         # 检查是否登录成功
-        if 'Home' in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
+        if 'Zaloguj się' not in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
             print('Login successful!')
         else:
             print('Login failed.')
