@@ -59,7 +59,7 @@ jobs:
         'password': password,
         'csrfmiddlewaretoken': csrfmiddlewaretoken,
         'csrftoken': csrftoken,
-        'session': session,
+         #'session': session,
         }
         
        
@@ -68,6 +68,8 @@ jobs:
         # 发送 POST 请求以登录
         login_response = session.post(login_url, data=payload, headers={'Referer': login_url})
         print(login_response.text)
+        print(csrfmiddlewaretoken)
+        print(csrftoken)
         # 检查是否登录成功
         if 'Zaloguj się' not in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
             print('Login successful!')
