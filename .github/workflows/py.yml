@@ -61,15 +61,15 @@ jobs:
         }
 
         # 如果找到 csrf_token，添加到表单数据中
-        #if csrf_token:
-        payload['csrf_token'] = csrf_token
+        if csrf_token:
+           payload['csrf_token'] = csrf_token
 
         # 发送 POST 请求以登录
         login_response = session.post(login_url, data=payload)
 
         # 检查是否登录成功
         if 'Dashboard' in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
-        print('Login successful!')
+            print('Login successful!')
         else:
-        print('Login failed.')
+            print('Login failed.')
         "
