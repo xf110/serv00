@@ -28,8 +28,8 @@ jobs:
     # 运行 Python 脚本进行登录操作
     - name: Run login script
       env:
-        PANEL_USERNAME: ${{ secrets.PANEL_USERNAME }}  # 从 GitHub Secrets 读取用户名
-        PANEL_PASSWORD: ${{ secrets.PANEL_PASSWORD }}  # 从 GitHub Secrets 读取密码
+        PANEL_USERNAME: ${{ secrets.USER1 }}  # 从 GitHub Secrets 读取用户名
+        PANEL_PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }}  # 从 GitHub Secrets 读取密码
       run: |
         python -c "
         import os
@@ -40,8 +40,8 @@ jobs:
         login_url = 'https://panel4.serv00.com/login'
 
         # 登录信息（从环境变量中获取）
-        username = "${{ secrets.USER1 }}"
-        password = "${{ secrets.SSH_PRIVATE_KEY }}"
+        username = os.getenv('PANEL_USERNAME')
+        password = os.getenv('PANEL_PASSWORD')
 
         # 创建一个会话对象
         session = requests.Session()
