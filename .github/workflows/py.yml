@@ -59,6 +59,7 @@ jobs:
         'password': password,
         'csrfmiddlewaretoken': csrfmiddlewaretoken,
         'csrftoken': csrftoken,
+        'session': session,
         }
         
        
