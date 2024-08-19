@@ -52,11 +52,13 @@ jobs:
 
         # 尝试从HTML表单中获取csrfmiddlewaretoken或csrftoken
         csrfmiddlewaretoken = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
+        csrftoken = session.cookies.get('csrftoken')
         # 准备表单数据
         payload = {
         'username': username,
         'password': password,
         'csrfmiddlewaretoken': csrfmiddlewaretoken,
+        'csrftoken': csrftoken,
         }
         
        
