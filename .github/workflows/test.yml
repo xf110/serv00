@@ -25,7 +25,7 @@ jobs:
           echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
 
           # 获取 sessionid 值
-          curl -k "$panel_url/login/?next=/" \
+          curl -ki "$panel_url/login/?next=/" \
           -H "Referer: $panel_url/login/" \
           -H "Cookie: csrftoken=$csrftoken" \
           -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}"
@@ -36,5 +36,5 @@ jobs:
 
           # 依次执行登录
                                                                                                                
-          login_and_check "${{ secrets.USER2 }}" "https://panel4.serv00.com"                                                                                                              
+          login_and_check "${{ secrets.USER1 }}" "https://panel4.serv00.com"                                                                                                              
                                                                                                                    
