@@ -28,7 +28,7 @@ jobs:
           curl -k "$panel_url/login/" \
           -H "Referer: $panel_url/login/" \
           -H "Cookie: csrftoken=$csrftoken" \
-          -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}&next=%2F")
+          -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}&next=%2F"
           
              
          
