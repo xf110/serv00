@@ -72,7 +72,7 @@ jobs:
 
         # 发送 POST 请求以登录
         login_response = session.post(login_url, data=payload, headers={'Referer': login_url})
-
+        print(login_response.text)
         # 检查是否登录成功
         if 'Home' in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
             print('Login successful!')
