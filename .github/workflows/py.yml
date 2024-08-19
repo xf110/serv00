@@ -32,44 +32,44 @@ jobs:
         PANEL_PASSWORD: ${{ secrets.PANEL_PASSWORD }}  # 从 GitHub Secrets 读取密码
       run: |
         python -c "
-import os
-import requests
-from bs4 import BeautifulSoup
+        import os
+        import requests
+        from bs4 import BeautifulSoup
 
-# 目标 URL
-login_url = 'https://panel4.serv00.com/login'
+        # 目标 URL
+        login_url = 'https://panel4.serv00.com/login'
 
-# 登录信息（从环境变量中获取）
-username = "${{ secrets.USER1 }}"
-password = "${{ secrets.SSH_PRIVATE_KEY }}"
+        # 登录信息（从环境变量中获取）
+        username = "${{ secrets.USER1 }}"
+        password = "${{ secrets.SSH_PRIVATE_KEY }}"
 
-# 创建一个会话对象
-session = requests.Session()
+        # 创建一个会话对象
+        session = requests.Session()
 
-# 获取登录页面内容
-response = session.get(login_url)
-soup = BeautifulSoup(response.text, 'html.parser')
+        # 获取登录页面内容
+        response = session.get(login_url)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-# 尝试获取 csrf_token，如果没有找到，则忽略
-csrf_token_input = soup.find('input', {'name': 'csrf_token'})
-csrf_token = csrf_token_input['value'] if csrf_token_input else None
+        # 尝试获取 csrf_token，如果没有找到，则忽略
+        csrf_token_input = soup.find('input', {'name': 'csrf_token'})
+        csrf_token = csrf_token_input['value'] if csrf_token_input else None
 
-# 准备表单数据
-payload = {
-    'username': username,
-    'password': password,
-}
+        # 准备表单数据
+        payload = {
+        'username': username,
+        'password': password,
+        }
 
-# 如果找到 csrf_token，添加到表单数据中
-if csrf_token:
-    payload['csrf_token'] = csrf_token
+        # 如果找到 csrf_token，添加到表单数据中
+        if csrf_token:
+        payload['csrf_token'] = csrf_token
 
-# 发送 POST 请求以登录
-login_response = session.post(login_url, data=payload)
+        # 发送 POST 请求以登录
+        login_response = session.post(login_url, data=payload)
 
-# 检查是否登录成功
-if 'Dashboard' in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
-    print('Login successful!')
-else:
-    print('Login failed.')
-"
+        # 检查是否登录成功
+        if 'Dashboard' in login_response.text:  # 根据实际的页面内容替换 'Dashboard'
+        print('Login successful!')
+        else:
+        print('Login failed.')
+        "
