@@ -28,9 +28,8 @@ jobs:
           sessionid=$(curl -kis "$panel_url/login/" -X POST \
           -H "Referer: $panel_url/login/" \
           -H "Cookie: csrftoken=$csrftoken" \
-          -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}&next=%2F" \
-          |  sed -n 's/.*sessionid=\([^;]*\);.*/\1/p')
-          echo -e "\033[36;1msessionid=\033[0m\033[35;1m$sessionid \033[0m"
+          -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}&next=%2F"
+          echo $sessionid
              
          
           }
