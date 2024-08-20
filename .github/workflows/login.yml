@@ -37,7 +37,6 @@ jobs:
 
           # 获取 sessionid 值
           sessionid=$(curl -kis "$panel_url/login/" -X POST \
-          #-H "Referer: $panel_url/login/" \
           -H "Cookie: csrftoken=$csrftoken" \
           -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}" \
           |  sed -n 's/.*sessionid=\([^;]*\);.*/\1/p')
