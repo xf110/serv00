@@ -14,6 +14,12 @@ jobs:
     steps:
       - name: 检查仓库
         uses: actions/checkout@v2
+      - name: Get ACCOUNTS_JSON
+        id: get-accounts
+        run: |
+          echo "$ACCOUNTS_JSON" > accounts.json
+        env:
+          ACCOUNTS_JSON: ${{ secrets.ACCOUNTS_JSON }} 
       - name: 登录ssh
         run: |
           echo "${{ secrets.ACCOUNTS_JSON }}" > accounts.json
