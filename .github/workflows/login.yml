@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检查仓库
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: 登录ssh
         run: |
           vnt="pgrep -x 'vnts' > /dev/null || (nohup ./tool/vnts -p 6911 -l /dev/null -g 192.168.26.222 -m 255.255.255.0 > /dev/null 2>&1 &)"
