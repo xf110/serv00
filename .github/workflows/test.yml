@@ -17,11 +17,11 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H s4.serv00.com >> ~/.ssh/known_hosts
+          ssh-keyscan -H panel4.serv00.com >> ~/.ssh/known_hosts
 
       - name: Run remote script
         run: |
-          ssh ${{ secrets.USER1 }}@s4.serv00.com 'bash ./tool/vnts.sh'
+          ssh ${{ secrets.USER1 }}@panel4.serv00.com 'bash ./tool/vnts.sh'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
                            
