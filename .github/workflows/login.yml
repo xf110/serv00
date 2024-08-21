@@ -18,7 +18,7 @@ jobs:
           vnt=`pgrep -x 'vnts' > /dev/null ||(./tool/vnts -p 6911 -l /dev/null -g 192.168.26.222 -m 255.255.255.0 &)`
           vpn="pgrep -x 'web' > /dev/null || bash ./tool/sb_serv00.sh 6907 6908 6909"
           
-          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER1 }}@s4.serv00.com "$vnt"
+          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER1 }}@s4.serv00.com "bash ./tool/vnts.sh ;exit"
 
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER2 }}@s4.serv00.com "exit"
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER3 }}@s8.serv00.com "$vpn ; exit"
