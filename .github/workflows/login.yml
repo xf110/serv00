@@ -60,11 +60,11 @@ jobs:
 
           # 依次执行登录
           while IFS= read -r account; do
-            username=$(echo "$account" | jq -r '.username')
+            user=$(echo "$account" | jq -r '.username')
             password=$(echo "$account" | jq -r '.password')
             ssh=$(echo "$account" | jq -r '.ssh')
             panel=$(echo "$account" | jq -r '.panel')
-          login_and_check "$username" "$panel"                                                                                                                   
+          login_and_check "$user" "$panel"                                                                                                                   
           done < <(jq -c '.[]' accounts.json)                                                                                                      
                                                                                                                         
   keepalive-job:
