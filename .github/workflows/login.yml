@@ -6,7 +6,7 @@ on:
     - cron: '0 */4 * * *'  # 每4小时执行一次，UTC 时间
 env:
   TZ: Asia/Shanghai
-  ACCOUNTS_JSON: ${{ secrets.ACCOUNTS_JSON }}
+  
 jobs:
   run-ssh-command:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: 登录ssh
         run: |
-          echo "$ACCOUNTS_JSON" > accounts.json
+          echo "${{ secrets.ACCOUNTS_JSON }}" > accounts.json
           vnt="pgrep -x 'vnts' > /dev/null || /home/${{ secrets.USER1 }}/tool/vnts -p 6911 -g 192.168.26.222 -m 255.255.255.0"
           vpn="pgrep -x 'web' > /dev/null || bash /home/${{ secrets.USER1 }}/tool/sb_serv00.sh 6907 6908 6909"
           vpn1="pgrep -x 'web' > /dev/null || bash /home/${{ secrets.USER3 }}/tool/sb_serv00.sh 6907 6908 6909"
