@@ -1,25 +1,3 @@
-Skip to content
-Navigation Menu
-xf110
-/
-serv00
-
-Type / to search
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-Daily Login Serv00 Command
-Daily Login Serv00 Command #43
-Jobs
-Run details
-Workflow file for this run
-.github/workflows/login.yml at 0dd379e
 name: Daily Login Serv00 Command
 
 on:
@@ -58,8 +36,8 @@ jobs:
           #echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
           # 获取 sessionid 值
           sessionid=$(curl -kis "$panel_url/login/" -X POST \
-          -H "Cookie: csrftoken=$csrftoken" \
           -H "Referer: $panel_url/login/" \
+          -H "Cookie: csrftoken=$csrftoken" \
           -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}" \
           |  sed -n 's/.*sessionid=\([^;]*\);.*/\1/p')
           #echo -e "\033[36;1msessionid=\033[0m\033[35;1m$sessionid \033[0m"
@@ -88,4 +66,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: gautamkrishnar/keepalive-workflow@v2
-Update login.yml · xf110/serv00@0dd379e
