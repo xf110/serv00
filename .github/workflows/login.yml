@@ -1,3 +1,25 @@
+Skip to content
+Navigation Menu
+xf110
+/
+serv00
+
+Type / to search
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+Daily Login Serv00 Command
+Daily Login Serv00 Command #43
+Jobs
+Run details
+Workflow file for this run
+.github/workflows/login.yml at 0dd379e
 name: Daily Login Serv00 Command
 
 on:
@@ -6,7 +28,6 @@ on:
     - cron: '0 */4 * * *'  # 每4小时执行一次，UTC 时间
 env:
   TZ: Asia/Shanghai
-  
 jobs:
   run-ssh-command:
     runs-on: ubuntu-latest
@@ -14,19 +35,11 @@ jobs:
     steps:
       - name: 检查仓库
         uses: actions/checkout@v2
-      - name: Get ACCOUNTS_JSON
-        id: get-accounts
-        run: |
-          echo "$ACCOUNTS_JSON" > accounts.json
-        env:
-          ACCOUNTS_JSON: ${{ secrets.ACCOUNTS_JSON }} 
       - name: 登录ssh
         run: |
-          echo "${{ secrets.ACCOUNTS_JSON }}" > accounts.json
           vnt="pgrep -x 'vnts' > /dev/null || /home/${{ secrets.USER1 }}/tool/vnts -p 6911 -g 192.168.26.222 -m 255.255.255.0"
           vpn="pgrep -x 'web' > /dev/null || bash /home/${{ secrets.USER1 }}/tool/sb_serv00.sh 6907 6908 6909"
           vpn1="pgrep -x 'web' > /dev/null || bash /home/${{ secrets.USER3 }}/tool/sb_serv00.sh 6907 6908 6909"
-          
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER1 }}@s4.serv00.com "$vnt"
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER2 }}@s4.serv00.com "exit"
           sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -tt ${{ secrets.USER3 }}@s8.serv00.com "$vpn1"
@@ -43,7 +56,6 @@ jobs:
           csrfmiddlewaretoken=$(echo "$response" | sed -n 's/.*<input type="hidden" name="csrfmiddlewaretoken" value="\([^"]*\)".*/\1/p' | head -n 1)
           #echo -e "\033[36;1mcsrfmiddlewaretoken=\033[0m\033[35;1m$csrfmiddlewaretoken \033[0m"
           #echo -e "\033[36;1mcsrftoken=\033[0m\033[35;1m$csrftoken \033[0m"
-
           # 获取 sessionid 值
           sessionid=$(curl -kis "$panel_url/login/" -X POST \
           -H "Cookie: csrftoken=$csrftoken" \
@@ -51,7 +63,6 @@ jobs:
           -d "csrfmiddlewaretoken=$csrfmiddlewaretoken&username=$username&password=${{ secrets.SSH_PRIVATE_KEY }}" \
           |  sed -n 's/.*sessionid=\([^;]*\);.*/\1/p')
           #echo -e "\033[36;1msessionid=\033[0m\033[35;1m$sessionid \033[0m"
-
           # 登录面板并检查状态
           status=$(curl -k -s "$panel_url"  \
           -H 'User-Agent: Github' \
@@ -63,16 +74,12 @@ jobs:
           echo -e "\033[36;1m$(date "+%G-%m-%d %H:%M:%S") ：\033[0m\033[35;1m$username $panel_url 失败了请检查！ \033[0m"
           fi
           }
-
           # 依次执行登录
-          while IFS= read -r account; do
-            user=$(echo "$account" | jq -r '.username')
-            password=$(echo "$account" | jq -r '.password')
-            ssh=$(echo "$account" | jq -r '.ssh')
-            panel=$(echo "$account" | jq -r '.panel')
-          login_and_check "$user" "$panel"                                                                                                                   
-          done < <(jq -c '.[]' accounts.json)                                                                                                      
-                                                                                                                        
+          login_and_check "${{ secrets.USER1 }}" "https://panel.ct8.pl"                                                                                                                   
+          login_and_check "${{ secrets.USER2 }}" "https://panel.ct8.pl"                                                                                                                   
+          login_and_check "${{ secrets.USER1 }}" "https://panel4.serv00.com"                                                                                                              
+          login_and_check "${{ secrets.USER2 }}" "https://panel4.serv00.com"                                                                                                              
+          login_and_check "${{ secrets.USER3 }}" "https://panel8.serv00.com"                                                                                                               
   keepalive-job:
     name: 保活工作流，防止github60天自动过期
     runs-on: ubuntu-latest
@@ -81,3 +88,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: gautamkrishnar/keepalive-workflow@v2
+Update login.yml · xf110/serv00@0dd379e
