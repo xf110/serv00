@@ -10,16 +10,22 @@ jobs:
     steps:
       - name: 检查仓库
         uses: actions/checkout@v4
-      - name: 登录ssh
+      - name: 登录SSH并执行命令
         run: |
+          execute_ssh_command() {
+            local user=$1
+            local host=$2
+            local command=$3
+            sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$user@$host" "$command"
+          }
           vnt="pgrep -x 'vnts' > /dev/null || (nohup ./tool/vnts -p 6911 -l /dev/null -g 192.168.26.222 -m 255.255.255.0 > /dev/null 2>&1 &)"
           vpn="pgrep -x 'web' > /dev/null || bash ./tool/sb_serv00.sh 6907 6908 6909"
-          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.USER1 }}@s4.serv00.com "$vnt"
-          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.USER2 }}@s4.serv00.com "exit"
-          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.USER3 }}@s8.serv00.com "$vpn"
-          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.USER1 }}@s1.ct8.pl "$vpn"
-          sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.USER2 }}@s1.ct8.pl "exit"
-      - name: 登录面板
+          execute_ssh_command "${{ secrets.USER1 }}" "s4.serv00.com" "$vnt"
+          execute_ssh_command "${{ secrets.USER2 }}" "s4.serv00.com" "exit"
+          execute_ssh_command "${{ secrets.USER3 }}" "s8.serv00.com" "$vpn"
+          execute_ssh_command "${{ secrets.USER1 }}" "s1.ct8.pl" "$vpn"
+          execute_ssh_command "${{ secrets.USER2 }}" "s1.ct8.pl" "exit"
+      - name: 登录面板并检查状态
         run: |  
           login_and_check() {
           local username=$1
