@@ -18,10 +18,11 @@ jobs:
             local command=$3
             sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$user@$host" "$command"
           }
-          vnt="pgrep -x 'vnts' > /dev/null || (nohup ./tool/vnts -p 6911 -l /dev/null -g 192.168.26.222 -m 255.255.255.0 > /dev/null 2>&1 &)"
+          vnts="pgrep -x 'vnts' > /dev/null || (nohup ./tool/vnts -p 6911 -l /dev/null -g 192.168.26.222 -m 255.255.255.0 > /dev/null 2>&1 &)"
           vpn="pgrep -x 'web' > /dev/null || bash ./tool/sb_serv00.sh 6907 6908 6909"
-          execute_ssh_command "${{ secrets.USER1 }}" "s4.serv00.com" "$vnt"
-          execute_ssh_command "${{ secrets.USER2 }}" "s4.serv00.com" "exit"
+          frps="pgrep -x 'frps' > /dev/null || (nohup ./tool/frps -c frps.toml > /dev/null 2>&1 &)"
+          execute_ssh_command "${{ secrets.USER1 }}" "s4.serv00.com" "$vnts"
+          execute_ssh_command "${{ secrets.USER2 }}" "s4.serv00.com" "$frps"
           execute_ssh_command "${{ secrets.USER3 }}" "s8.serv00.com" "$vpn"
           execute_ssh_command "${{ secrets.USER1 }}" "s1.ct8.pl" "$vpn"
           execute_ssh_command "${{ secrets.USER2 }}" "s1.ct8.pl" "exit"
