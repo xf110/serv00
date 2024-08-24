@@ -19,7 +19,7 @@ jobs:
             sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$user@$host" "$command"
           }
           vnts="pgrep -x 'vnts' > /dev/null || (nohup ./tool/vnts -p 6911 -l /dev/null -g 192.168.26.222 -m 255.255.255.0 > /dev/null 2>&1 &)"
-          vpn="pgrep -x 'web' > /dev/null || bash ./tool/sb_serv00.sh 6907 6908 6909"
+          vpn="pgrep -x 'web' > /dev/null || bash ./tool/vpn.sh"
           frps="pgrep -x 'frps' > /dev/null || (nohup ./tool/frp/frps -c ./tool/frp/frps.toml > /dev/null 2>&1 &)"
           n2n="pgrep -x 'supernode' > /dev/null || (nohup ./tool/n2n/n2n.sh >/dev/null 2>&1 &)"
           execute_ssh_command "${{ secrets.USER1 }}" "s4.serv00.com" "$vnts"
