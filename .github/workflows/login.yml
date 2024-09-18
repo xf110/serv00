@@ -26,7 +26,7 @@ jobs:
           execute_ssh_command "${{ secrets.USER2 }}" "s4.serv00.com" "$frps"
           execute_ssh_command "${{ secrets.USER3 }}" "s8.serv00.com" "$vpn"
           #execute_ssh_command "${{ secrets.USER1 }}" "s1.ct8.pl" "$vpn"
-          execute_ssh_command "${{ secrets.USER2 }}" "s1.ct8.pl" "exit"
+          execute_ssh_command "${{ secrets.USER2 }}" "s1.ct8.pl" "vnts"
       - name: 登录面板并检查状态
         run: |  
           login_and_check() {
