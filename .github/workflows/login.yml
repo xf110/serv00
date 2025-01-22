@@ -3,7 +3,7 @@ name: Daily Login Serv00 Command
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */8 * * *'  # 每2小时执行一次，UTC 时间
+    - cron: '0 */2 * * *'  # 每2小时执行一次，UTC 时间
 jobs:
   run-ssh-command:
     runs-on: ubuntu-latest
