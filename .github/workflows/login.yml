@@ -59,7 +59,7 @@ jobs:
           # 依次执行登录
           #login_and_check "${{ secrets.USER1 }}" "https://panel.ct8.pl"                                                                                                                   
           #login_and_check "${{ secrets.USER2 }}" "https://panel.ct8.pl"                                                                                                                   
-          login_and_check "${{ secrets.USER1 }}" "https://panel4.serv00.com"                                                                                                              
+          #login_and_check "${{ secrets.USER1 }}" "https://panel4.serv00.com"                                                                                                              
           login_and_check "${{ secrets.USER2 }}" "https://panel4.serv00.com"                                                                                                              
           login_and_check "${{ secrets.USER3 }}" "https://panel8.serv00.com"                                                                                                               
   keepalive-job:
